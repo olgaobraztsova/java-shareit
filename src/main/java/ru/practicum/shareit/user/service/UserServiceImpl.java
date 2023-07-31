@@ -25,14 +25,14 @@ public class UserServiceImpl implements UserService {
 
     public UserDto getUserById(Integer id) {
         log.debug("Получение пользователя по ID " + id);
-        return UserMapper.UserToDto(userRepository.getUserById(id));
+        return UserMapper.userToDto(userRepository.getUserById(id));
     }
 
     public UserDto create(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
         validateEmail(user);
         log.debug("Создание пользователя с email: " + user.getEmail());
-        return UserMapper.UserToDto(userRepository.create(user));
+        return UserMapper.userToDto(userRepository.create(user));
     }
 
     public UserDto update(UserDto userDto, Integer userId) {
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         }
         validateEmail(UserMapper.toUser(userDto));
         log.debug("Изменение данных пользователя с ID " + userId);
-        return UserMapper.UserToDto(userRepository.update(UserMapper.toUser(userDto), userId));
+        return UserMapper.userToDto(userRepository.update(UserMapper.toUser(userDto), userId));
     }
 
     public void delete(Integer userId) {
