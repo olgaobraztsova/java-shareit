@@ -25,7 +25,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(userRepository.getUserById(userId));
         log.debug("Добавлена вещь " + item.getName() + " пользователем с ID " + userId);
-        return ItemMapper.ItemToDto(itemRepository.addItem(item));
+        return ItemMapper.itemToDto(itemRepository.addItem(item));
     }
 
     @Override
@@ -45,24 +45,24 @@ public class ItemServiceImpl implements ItemService {
 
         Item updatedItem = itemRepository.updateItem(itemDto, userId);
         log.debug("Обновлены данные о вещи " + itemDto.getName() + " пользователем с ID " + userId);
-        return ItemMapper.ItemToDto(updatedItem);
+        return ItemMapper.itemToDto(updatedItem);
     }
 
     @Override
     public ItemDto getItemById(Integer itemId) {
-        return ItemMapper.ItemToDto(itemRepository.getItemById(itemId));
+        return ItemMapper.itemToDto(itemRepository.getItemById(itemId));
     }
 
     @Override
     public Collection<ItemDto> getUserItems(Integer userId) {
         User user = userRepository.getUserById(userId); // проверка существования пользователя
         log.debug("Получение информации о всех вещах пользователя " + user.getName() + " с ID " + userId);
-        return ItemMapper.ItemsListToDto(itemRepository.getUserItems(user));
+        return ItemMapper.itemsListToDto(itemRepository.getUserItems(user));
     }
 
     @Override
     public Collection<ItemDto> findItems(String searchKey) {
         log.debug("Поиск вещей по ключевому слову " + searchKey);
-        return ItemMapper.ItemsListToDto(itemRepository.findItems(searchKey));
+        return ItemMapper.itemsListToDto(itemRepository.findItems(searchKey));
     }
 }

@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     public Collection<UserDto> getAllUsers() {
         log.debug("Получение списка всех пользователей");
-        return UserMapper.UsersListToDto(userRepository.getAllUsers());
+        return UserMapper.usersListToDto(userRepository.getAllUsers());
     }
 
     public UserDto getUserById(Integer id) {

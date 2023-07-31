@@ -17,7 +17,7 @@ public class UserMapper {
                 .build();
     }
 
-    public UserDto UserToDto(User user) {
+    public UserDto userToDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -25,9 +25,10 @@ public class UserMapper {
                 .build();
     }
 
-    public Collection<UserDto> UsersListToDto(Collection<User> users) {
+    public Collection<UserDto> usersListToDto(Collection<User> users) {
         return users.stream()
-                .map(UserMapper::UserToDto)
+                .map(UserMapper::userToDto)
                 .collect(Collectors.toList());
     }
 }
+

@@ -22,7 +22,7 @@ public class ItemMapper {
                 .build();
     }
 
-    public ItemDto ItemToDto(Item item) {
+    public ItemDto itemToDto(Item item) {
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -31,9 +31,9 @@ public class ItemMapper {
                 .build();
     }
 
-    public Collection<ItemDto> ItemsListToDto(Collection<Item> items) {
+    public Collection<ItemDto> itemsListToDto(Collection<Item> items) {
         return items.stream()
-                .map(ItemMapper::ItemToDto)
+                .map(ItemMapper::itemToDto)
                 .collect(Collectors.toList());
     }
 }
