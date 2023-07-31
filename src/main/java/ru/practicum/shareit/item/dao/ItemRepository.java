@@ -8,10 +8,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class ItemRepository {
@@ -31,7 +28,7 @@ public class ItemRepository {
             throw new ItemNotFoundException("Вещь с ID " + itemDto.getId() + " не найдена");
         }
         Item existingItem = itemMap.get(itemDto.getId());
-        if (existingItem.getOwner().getId().equals(userId)) {
+        if (!existingItem.getOwner().getId().equals(userId)) {
             throw new AccessDeniedException("Пользователь может редактировать только свою вещь");
         }
         if (itemDto.getAvailable() != null && itemDto.getAvailable() != existingItem.getAvailable()) {

@@ -9,6 +9,7 @@ import javax.validation.constraints.Email;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class User {
     private Integer id;
     @NonNull

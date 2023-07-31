@@ -8,6 +8,7 @@ import ru.practicum.shareit.user.model.User;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Item {
     private Integer id;
     @NonNull
