@@ -31,7 +31,7 @@ public class ItemRepository {
             throw new ItemNotFoundException("Вещь с ID " + itemDto.getId() + " не найдена");
         }
         Item existingItem = itemMap.get(itemDto.getId());
-        if (existingItem.getOwner().getId() != userId) {
+        if (existingItem.getOwner().getId().equals(userId)) {
             throw new AccessDeniedException("Пользователь может редактировать только свою вещь");
         }
         if (itemDto.getAvailable() != null && itemDto.getAvailable() != existingItem.getAvailable()) {
@@ -57,7 +57,7 @@ public class ItemRepository {
     public Collection<Item> getUserItems(User user) {
         Collection<Item> userItems = new ArrayList<>();
         for (Item item : itemMap.values()) {
-            if (item.getOwner().getId() == user.getId()) {
+            if (item.getOwner().getId().equals(user.getId())) {
                 userItems.add(item);
             }
         }

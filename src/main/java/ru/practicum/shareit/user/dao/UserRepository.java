@@ -58,7 +58,7 @@ public class UserRepository {
 
     private void checkIfEmailAlreadyRegistered(User user) {
         for (User u : userRepository.values()) {
-            if (u.getId() == user.getId()) {
+            if (u.getId().equals(user.getId())) {
                 continue;
             }
             if (u.getEmail().equals(user.getEmail())) {
