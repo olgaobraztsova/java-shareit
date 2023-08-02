@@ -3,7 +3,6 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.UserInputMissingOrInvalidEmailException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -19,42 +18,28 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     public Collection<UserDto> getAllUsers() {
-        log.debug("Получение списка всех пользователей");
+        log.info("Получение списка всех пользователей");
         return UserMapper.usersListToDto(userRepository.getAllUsers());
     }
 
     public UserDto getUserById(Integer id) {
-        log.debug("Получение пользователя по ID " + id);
+        log.info("Получение пользователя по ID {}", id);
         return UserMapper.userToDto(userRepository.getUserById(id));
     }
 
-    public UserDto create(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
-        validateEmail(user);
-        log.debug("Создание пользователя с email: " + user.getEmail());
-        return UserMapper.userToDto(userRepository.create(user));
+        log.info("Создание пользователя с email: {}", user.getEmail());
+        return UserMapper.userToDto(userRepository.createUser(user));
     }
 
-    public UserDto update(UserDto userDto, Integer userId) {
-        User user = UserMapper.toUser(getUserById(userId));
-        if (userDto.getName() == null) {
-            userDto.setName(user.getName());
-        }
-        if (userDto.getEmail() == null) {
-            userDto.setEmail(user.getEmail());
-        }
-        validateEmail(UserMapper.toUser(userDto));
-        log.debug("Изменение данных пользователя с ID " + userId);
-        return UserMapper.userToDto(userRepository.update(UserMapper.toUser(userDto), userId));
+    public UserDto updateUser(UserDto userDto, Integer userId) {
+        log.info("Изменение данных пользователя с ID {}", userId);
+        return UserMapper.userToDto(userRepository.updateUser(userDto, userId));
     }
 
-    public void delete(Integer userId) {
-        userRepository.delete(userId);
-    }
-
-    private void validateEmail(User user) {
-        if (user.getEmail() == null || user.getEmail().isEmpty()) {
-            throw new UserInputMissingOrInvalidEmailException("Email не может быть пустым");
-        }
+    public void deleteUser(Integer userId) {
+        log.info("Добавление пользователя с ID {}", userId);
+        userRepository.deleteUser(userId);
     }
 }

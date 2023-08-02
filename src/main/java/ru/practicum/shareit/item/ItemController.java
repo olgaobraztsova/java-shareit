@@ -1,11 +1,12 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.validation.Create;
 
-import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
@@ -16,19 +17,21 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public ItemDto addItem(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") int userId) {
-        return itemService.addItem(itemDto, userId);
+    public ItemDto createItem(@Validated(Create.class)
+                              @RequestBody ItemDto itemDto,
+                              @RequestHeader("X-Sharer-User-Id") int userId) {
+        return itemService.createItem(itemDto, userId);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto editItem(@Valid @RequestBody ItemDto itemDto,
-                            @RequestHeader("X-Sharer-User-Id") int userId,
-                            @PathVariable Integer itemId) {
+    public ItemDto updateItem(@RequestBody ItemDto itemDto,
+                              @RequestHeader("X-Sharer-User-Id") int userId,
+                              @PathVariable Integer itemId) {
         return itemService.updateItem(itemDto, itemId, userId);
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getItem(@PathVariable Integer itemId) {
+    public ItemDto getItemById(@PathVariable Integer itemId) {
         return itemService.getItemById(itemId);
     }
 

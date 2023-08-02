@@ -2,7 +2,8 @@ package ru.practicum.shareit.user.dao;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.UserEmailIdAlreadyExistsException;
-import ru.practicum.shareit.exception.UserNotFoundException;
+import ru.practicum.shareit.exception.EntityNotFoundException;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
@@ -14,26 +15,25 @@ public class UserRepository {
     private final Map<Integer, User> userRepository = new HashMap<>();
     private Integer idCounter = 1;
 
-    public User create(User user) {
-        checkIfEmailAlreadyRegistered(user);
+    public User createUser(User user) {
+        checkIfEmailAlreadyRegistered(user.getId(), user.getEmail());
         user.setId(idCounter++);
         userRepository.put(user.getId(), user);
         return user;
     }
 
-    public User update(User newUser, Integer userId) {
-        newUser.setId(userId);
+    public User updateUser(UserDto userDto, Integer userId) {
         checkIfUserExists(userId);
-        checkIfEmailAlreadyRegistered(newUser);
-        User updatedUser = userRepository.get(userId);
-        if (newUser.getEmail() != null && !newUser.getEmail().isEmpty()) {
-            updatedUser.setEmail(newUser.getEmail());
+        User existingUser = getUserById(userId);
+
+        if (userDto.getEmail() != null && !userDto.getEmail().isEmpty()) {
+            checkIfEmailAlreadyRegistered(userId, userDto.getEmail());
+            existingUser.setEmail(userDto.getEmail());
         }
-        if (!newUser.getName().isEmpty()) {
-            updatedUser.setName(newUser.getName());
+        if (userDto.getName() != null && !userDto.getName().isEmpty()) {
+            existingUser.setName(userDto.getName());
         }
-        userRepository.put(updatedUser.getId(), updatedUser);
-        return updatedUser;
+        return existingUser;
     }
 
     public User getUserById(Integer userId) {
@@ -45,24 +45,24 @@ public class UserRepository {
         return userRepository.values();
     }
 
-    public void delete(Integer userId) {
+    public void deleteUser(Integer userId) {
         checkIfUserExists(userId);
         userRepository.remove(userId);
     }
 
     private void checkIfUserExists(Integer userId) {
         if (!userRepository.containsKey(userId)) {
-            throw new UserNotFoundException("Пользователя с ID " + userId + " не существует");
+            throw new EntityNotFoundException("Пользователя с ID " + userId + " не существует");
         }
     }
 
-    private void checkIfEmailAlreadyRegistered(User user) {
+    private void checkIfEmailAlreadyRegistered(Integer userId, String email) {
         for (User u : userRepository.values()) {
-            if (u.getId().equals(user.getId())) {
+            if (u.getId().equals(userId)) {
                 continue;
             }
-            if (u.getEmail().equals(user.getEmail())) {
-                throw new UserEmailIdAlreadyExistsException("Email " + user.getEmail() + " уже зарегистрирован");
+            if (u.getEmail().equals(email)) {
+                throw new UserEmailIdAlreadyExistsException("Email " + email + " уже зарегистрирован");
             }
         }
     }
