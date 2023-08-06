@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.AccessDeniedException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
@@ -31,8 +32,28 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto updateItem(ItemDto itemDto, Integer itemId, Integer userId) {
+        Item existingItem = itemRepository.getItemById(itemId);
+        if (!existingItem.getOwner().getId().equals(userId)) {
+            throw new AccessDeniedException("Пользователь может редактировать только свою вещь");
+        }
+
+        String name = itemDto.getName();
+        if (name != null && !name.isBlank()) {
+            existingItem.setName(name);
+        }
+
+        String description = itemDto.getDescription();
+        if (description != null && !description.isBlank()) {
+            existingItem.setDescription(description);
+        }
+
+        Boolean available = itemDto.getAvailable();
+        if (available != null && existingItem.getAvailable() != available) {
+            existingItem.setAvailable(itemDto.getAvailable());
+        }
+
         log.info("Обновлены данные о вещи {} пользователем с ID  {}", itemDto.getName(), userId);
-        return ItemMapper.itemToDto(itemRepository.updateItem(itemDto, itemId, userId));
+        return ItemMapper.itemToDto(itemRepository.updateItem(existingItem));
     }
 
     @Override

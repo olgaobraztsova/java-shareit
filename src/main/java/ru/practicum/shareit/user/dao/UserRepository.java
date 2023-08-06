@@ -16,24 +16,15 @@ public class UserRepository {
     private Integer idCounter = 1;
 
     public User createUser(User user) {
-        checkIfEmailAlreadyRegistered(user.getId(), user.getEmail());
+//        checkIfEmailAlreadyRegistered(user.getId(), user.getEmail());
         user.setId(idCounter++);
         userRepository.put(user.getId(), user);
         return user;
     }
 
-    public User updateUser(UserDto userDto, Integer userId) {
-        checkIfUserExists(userId);
-        User existingUser = getUserById(userId);
-
-        if (userDto.getEmail() != null && !userDto.getEmail().isEmpty()) {
-            checkIfEmailAlreadyRegistered(userId, userDto.getEmail());
-            existingUser.setEmail(userDto.getEmail());
-        }
-        if (userDto.getName() != null && !userDto.getName().isEmpty()) {
-            existingUser.setName(userDto.getName());
-        }
-        return existingUser;
+    public User updateUser(User user) {
+        userRepository.put(user.getId(), user);
+        return user;
     }
 
     public User getUserById(Integer userId) {
@@ -56,14 +47,14 @@ public class UserRepository {
         }
     }
 
-    private void checkIfEmailAlreadyRegistered(Integer userId, String email) {
-        for (User u : userRepository.values()) {
-            if (u.getId().equals(userId)) {
-                continue;
-            }
-            if (u.getEmail().equals(email)) {
-                throw new UserEmailIdAlreadyExistsException("Email " + email + " уже зарегистрирован");
-            }
-        }
-    }
+//    private void checkIfEmailAlreadyRegistered(Integer userId, String email) {
+//        for (User u : userRepository.values()) {
+//            if (u.getId().equals(userId)) {
+//                continue;
+//            }
+//            if (u.getEmail().equals(email)) {
+//                throw new UserEmailIdAlreadyExistsException("Email " + email + " уже зарегистрирован");
+//            }
+//        }
+//    }
 }

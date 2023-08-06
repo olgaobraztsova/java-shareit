@@ -21,32 +21,9 @@ public class ItemRepository {
         return item;
     }
 
-    public Item updateItem(ItemDto itemDto, Integer itemId, Integer userId) {
-        if (itemMap.get(itemId) == null) {
-            throw new EntityNotFoundException("Вещь с ID " + itemDto.getId() + " не найдена");
-        }
-
-        Item existingItem = itemMap.get(itemId);
-        if (!existingItem.getOwner().getId().equals(userId)) {
-            throw new AccessDeniedException("Пользователь может редактировать только свою вещь");
-        }
-
-        String name = itemDto.getName();
-        if (name != null && !name.isBlank()) {
-            existingItem.setName(name);
-        }
-
-        String description = itemDto.getDescription();
-        if (description != null && !description.isBlank()) {
-            existingItem.setDescription(description);
-        }
-
-        Boolean available = itemDto.getAvailable();
-        if (available != null && existingItem.getAvailable() != available) {
-            existingItem.setAvailable(itemDto.getAvailable());
-        }
-
-        return existingItem;
+    public Item updateItem(Item item) {
+        itemMap.put(item.getId(), item);
+        return item;
     }
 
     public Item getItemById(Integer id) {
