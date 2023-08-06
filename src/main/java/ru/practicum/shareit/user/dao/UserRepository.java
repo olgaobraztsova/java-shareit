@@ -1,9 +1,7 @@
 package ru.practicum.shareit.user.dao;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.exception.UserEmailIdAlreadyExistsException;
 import ru.practicum.shareit.exception.EntityNotFoundException;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
@@ -16,7 +14,6 @@ public class UserRepository {
     private Integer idCounter = 1;
 
     public User createUser(User user) {
-//        checkIfEmailAlreadyRegistered(user.getId(), user.getEmail());
         user.setId(idCounter++);
         userRepository.put(user.getId(), user);
         return user;
@@ -46,15 +43,4 @@ public class UserRepository {
             throw new EntityNotFoundException("Пользователя с ID " + userId + " не существует");
         }
     }
-
-//    private void checkIfEmailAlreadyRegistered(Integer userId, String email) {
-//        for (User u : userRepository.values()) {
-//            if (u.getId().equals(userId)) {
-//                continue;
-//            }
-//            if (u.getEmail().equals(email)) {
-//                throw new UserEmailIdAlreadyExistsException("Email " + email + " уже зарегистрирован");
-//            }
-//        }
-//    }
 }

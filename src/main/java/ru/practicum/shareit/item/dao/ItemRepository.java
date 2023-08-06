@@ -1,9 +1,7 @@
 package ru.practicum.shareit.item.dao;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.exception.AccessDeniedException;
 import ru.practicum.shareit.exception.EntityNotFoundException;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
