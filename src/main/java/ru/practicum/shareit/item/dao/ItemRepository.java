@@ -19,11 +19,6 @@ public class ItemRepository {
         return item;
     }
 
-    public Item updateItem(Item item) {
-        itemMap.put(item.getId(), item);
-        return item;
-    }
-
     public Item getItemById(Integer id) {
         if (!itemMap.containsKey(id)) {
             throw new EntityNotFoundException("Вещь с ID " + id + " не найдена");

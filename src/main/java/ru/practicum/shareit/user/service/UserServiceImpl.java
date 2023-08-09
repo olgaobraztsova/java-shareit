@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         }
 
         log.info("Изменение данных пользователя с ID {}", userId);
-        return UserMapper.userToDto(userRepository.updateUser(existingUser));
+        return UserMapper.userToDto(existingUser);
     }
 
     public void deleteUser(Integer userId) {

@@ -19,11 +19,6 @@ public class UserRepository {
         return user;
     }
 
-    public User updateUser(User user) {
-        userRepository.put(user.getId(), user);
-        return user;
-    }
-
     public User getUserById(Integer userId) {
         checkIfUserExists(userId);
         return userRepository.get(userId);

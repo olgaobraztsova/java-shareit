@@ -53,7 +53,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         log.info("Обновлены данные о вещи {} пользователем с ID  {}", itemDto.getName(), userId);
-        return ItemMapper.itemToDto(itemRepository.updateItem(existingItem));
+        return ItemMapper.itemToDto(existingItem);
     }
 
     @Override
