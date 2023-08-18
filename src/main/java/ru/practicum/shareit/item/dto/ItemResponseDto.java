@@ -15,7 +15,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ItemResponseDto implements Comparable<ItemResponseDto>{
+public class ItemResponseDto implements Comparable<ItemResponseDto> {
     private Integer id;
     @NotBlank
     private String name;
@@ -31,5 +31,6 @@ public class ItemResponseDto implements Comparable<ItemResponseDto>{
     public int compareTo(ItemResponseDto o) {
         return this.getId() - o.getId();
     }
+
     private Collection<CommentResponseDto> comments;
 }

@@ -33,6 +33,7 @@ public class CommentMapper {
                 .created(localDateTime)
                 .build();
     }
+
     public List<CommentResponseDto> commentsListToDto(List<Comment> comments) {
         return comments.stream()
                 .map(CommentMapper::toCommentResponseDto)
