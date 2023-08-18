@@ -6,6 +6,7 @@ target/
 *.class
 *.jar
 *.DS_Store
+.github/workflows/api-tests.yml
 
 ### STS ###
 .apt_generated
