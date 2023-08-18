@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
-import ru.practicum.shareit.validation.Create;
+import ru.practicum.shareit.booking.service.validation.Create;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -24,4 +24,7 @@ public class ItemDto {
 
     @NotNull(groups = {Create.class}, message = "Поле available должно иметь значение")
     private Boolean available;
+
+    private Integer ownerId;
+
 }

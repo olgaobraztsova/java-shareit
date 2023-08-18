@@ -1,10 +1,16 @@
 package ru.practicum.shareit.item.mapper;
 
 import lombok.experimental.UtilityClass;
+import ru.practicum.shareit.booking.mapper.BookingMapper;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.mapper.UserMapper;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @UtilityClass
@@ -25,7 +31,30 @@ public class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .ownerId(item.getOwner().getId())
                 .build();
+    }
+
+    public ItemResponseDto itemToItemResponseDto(Item item,
+                                                 Booking lastBooking,
+                                                 Booking nextBooking, List<Comment> comments) {
+
+        ItemResponseDto itemResponseDto = new ItemResponseDto();
+        itemResponseDto.setId(item.getId());
+        itemResponseDto.setName(item.getName());
+        itemResponseDto.setDescription(item.getDescription());
+        itemResponseDto.setAvailable(item.getAvailable());
+        itemResponseDto.setOwner(UserMapper.userToDto(item.getOwner()));
+        itemResponseDto.setComments(CommentMapper.commentsListToDto(comments));
+
+        if (lastBooking != null) {
+            itemResponseDto.setLastBooking(BookingMapper.bookingToBookingShortDto(lastBooking));
+        }
+        if (nextBooking != null) {
+            itemResponseDto.setNextBooking(BookingMapper.bookingToBookingShortDto(nextBooking));
+        }
+
+        return itemResponseDto;
     }
 
     public Collection<ItemDto> itemsListToDto(Collection<Item> items) {
@@ -33,4 +62,5 @@ public class ItemMapper {
                 .map(ItemMapper::itemToDto)
                 .collect(Collectors.toList());
     }
+
 }
