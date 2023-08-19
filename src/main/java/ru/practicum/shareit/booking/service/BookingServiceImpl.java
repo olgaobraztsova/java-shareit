@@ -152,7 +152,8 @@ public class BookingServiceImpl implements BookingService {
                 userBookings = bookingRepository.findByBookerIdAndStatusEqualsOrderByStartDesc(bookerId, Status.REJECTED);
                 log.info("Вывод всех бронирований пользователя {} со статусом REJECTED", bookerId);
                 break;
-
+            default:
+                throw new IllegalArgumentException("Неизвестное значение параметра state");
         }
         return BookingMapper.bookingsListToDto(userBookings);
     }
