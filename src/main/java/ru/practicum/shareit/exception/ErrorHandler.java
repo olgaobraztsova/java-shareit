@@ -13,14 +13,14 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handlePostNotFound(final EntityNotFoundException e) {
+    public ErrorResponse handleEntityNotFound(final EntityNotFoundException e) {
         log.debug("Получен статус 404 Not Found {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleUserAlreadyExists(final UserEmailIdAlreadyExistsException e) {
+    public ErrorResponse handleUserAlreadyExists(final ConflictExistsException e) {
         log.debug("Получен статус 409 Conflict {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
@@ -35,6 +35,13 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        log.debug("Получен статус 400 Bad Request {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleAvailabilityException(final AvailabilityException e) {
         log.debug("Получен статус 400 Bad Request {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
