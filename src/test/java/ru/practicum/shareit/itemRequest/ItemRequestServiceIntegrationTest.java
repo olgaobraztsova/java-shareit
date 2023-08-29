@@ -33,12 +33,13 @@ public class ItemRequestServiceIntegrationTest {
                 .email("requester@email.com")
                 .build();
         em.persist(requester);
+        em.flush();
 
         ItemRequestShortDto itemRequestShortDto = ItemRequestShortDto.builder()
                 .description("запрос на вещь")
                 .build();
 
-        ItemRequestDto itemRequestDto = service.createItemRequest(1, itemRequestShortDto);
+        ItemRequestDto itemRequestDto = service.createItemRequest(requester.getId(), itemRequestShortDto);
 
         TypedQuery<ItemRequest> query = em.createQuery("Select i from ItemRequest i where i.id = :id", ItemRequest.class);
         ItemRequest itemRequest = query.setParameter("id", itemRequestDto.getId()).getSingleResult();

@@ -71,6 +71,7 @@ public class ItemServiceTest {
     @BeforeEach
     void beforeEach() {
 
+        LocalDateTime now = LocalDateTime.now();
         itemService = new ItemServiceImpl(
                 itemRepository,
                 userRepository,
@@ -89,7 +90,7 @@ public class ItemServiceTest {
                 1,
                 "Описание запроса",
                 requester,
-                LocalDateTime.now().minusHours(2));
+                now.minusHours(2));
 
         item = Item.builder()
                 .id(1)
@@ -141,36 +142,36 @@ public class ItemServiceTest {
                 "новый комментарий",
                 itemDto,
                 booker.getName(),
-                LocalDateTime.now().minusDays(1));
+                now.minusDays(1));
 
         comment = new Comment(
                 1,
                 "новый комментарий",
                 item,
                 booker,
-                LocalDateTime.now().minusDays(1));
+                now.minusDays(1));
 
 
         BookingShortDto nextBookingDto = new BookingShortDto(
                 1,
-                LocalDateTime.now().plusDays(2),
-                LocalDateTime.now().plusDays(3),
+                now.plusDays(2),
+                now.plusDays(3),
                 booker.getId(),
                 Status.APPROVED
         );
 
         BookingShortDto lastBookingDto = new BookingShortDto(
                 1,
-                LocalDateTime.now().minusDays(3),
-                LocalDateTime.now().minusDays(2),
+                now.minusDays(3),
+                now.minusDays(2),
                 booker.getId(),
                 Status.APPROVED
         );
 
         nextBooking = new Booking(
                 1,
-                LocalDateTime.now().plusDays(2),
-                LocalDateTime.now().plusDays(3),
+                now.plusDays(2),
+                now.plusDays(3),
                 item,
                 booker,
                 Status.APPROVED
@@ -178,8 +179,8 @@ public class ItemServiceTest {
 
         lastBooking = new Booking(
                 1,
-                LocalDateTime.now().minusDays(3),
-                LocalDateTime.now().minusDays(2),
+                now.minusDays(3),
+                now.minusDays(2),
                 item,
                 booker,
                 Status.APPROVED
