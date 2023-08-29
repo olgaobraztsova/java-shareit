@@ -8,7 +8,6 @@ import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.dto.ItemResponseDtoForRequest;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.request.dto.ItemRequestDtoWithResponses;
 import ru.practicum.shareit.user.mapper.UserMapper;
 
 import java.util.Collection;

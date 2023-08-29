@@ -49,7 +49,7 @@ public class UserServiceIntegrationTest {
         assertThat(targetUsers.size(), is(userDtoList.size()));
 
         for (UserDto sourceUser : userDtoList) {
-            assertThat(targetUsers, hasItem( allOf(
+            assertThat(targetUsers, hasItem(allOf(
                     hasProperty("id", notNullValue()),
                     hasProperty("name", equalTo(sourceUser.getName())),
                     hasProperty("email", equalTo(sourceUser.getEmail()))
