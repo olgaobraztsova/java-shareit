@@ -4,17 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ItemRequestDto {
-    private Integer id;
+public class ItemRequestShortDto {
+    @NotBlank(message = "Описание запроса не может быть пустым")
     private String description;
-    private User requester;
-    private LocalDateTime created;
 }

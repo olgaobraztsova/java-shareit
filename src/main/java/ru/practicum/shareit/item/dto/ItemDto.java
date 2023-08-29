@@ -1,9 +1,6 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import ru.practicum.shareit.booking.service.validation.Create;
 
 import javax.validation.constraints.NotBlank;
@@ -12,6 +9,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class ItemDto {
     private Integer id;
@@ -26,5 +24,7 @@ public class ItemDto {
     private Boolean available;
 
     private Integer ownerId;
+
+    private Integer requestId;
 
 }

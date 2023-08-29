@@ -5,8 +5,10 @@ import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemResponseDto;
+import ru.practicum.shareit.item.dto.ItemResponseDtoForRequest;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dto.ItemRequestDtoWithResponses;
 import ru.practicum.shareit.user.mapper.UserMapper;
 
 import java.util.Collection;
@@ -31,6 +33,7 @@ public class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .requestId((item.getRequest() != null) ? item.getRequest().getId() : null)
                 .ownerId(item.getOwner().getId())
                 .build();
     }
@@ -61,6 +64,16 @@ public class ItemMapper {
         return items.stream()
                 .map(ItemMapper::itemToDto)
                 .collect(Collectors.toList());
+    }
+
+    public ItemResponseDtoForRequest toItemResponseDtoForRequest(Item item, Integer requestId) {
+        return ItemResponseDtoForRequest.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .requestId(requestId)
+                .available(item.getAvailable())
+                .build();
     }
 
 }
