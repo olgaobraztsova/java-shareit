@@ -16,6 +16,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.exception.AvailabilityException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -131,7 +133,19 @@ public class BookingControllerTest {
                 .andExpect(jsonPath("$.item.description", is(bookingResponseDto.getItem().getDescription())))
                 .andExpect(jsonPath("$.item.available", is(bookingResponseDto.getItem().getAvailable())))
                 .andExpect(jsonPath("$.status", is(bookingResponseDto.getStatus().name())));
+    }
 
+    @Test
+    void testCreateBookingWhenItemUnavailable400BadRequest() throws Exception {
+        Mockito.when(bookingService.createBooking(any(), any())).thenThrow(new AvailabilityException(""));
+
+        mvc.perform(post("/bookings")
+                        .content(mapper.writeValueAsString(bookingDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .header("X-Sharer-User-Id", 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof AvailabilityException));
     }
 
     @Test
@@ -202,7 +216,6 @@ public class BookingControllerTest {
 
         Mockito.verify(bookingService, Mockito.times(1))
                 .getAllBookingsByUser(1, "ALL", 0, 10);
-
     }
 
     @Test
@@ -222,5 +235,22 @@ public class BookingControllerTest {
 
         Mockito.verify(bookingService, Mockito.times(1))
                 .getAllItemBookingsByOwner(1, "ALL", 0, 10);
+    }
+
+    @Test
+    void testCreateBookingWhenItemIsNotAvailable() throws Exception {
+
+        Mockito.when(bookingService.createBooking(any(), any())).thenThrow(new AvailabilityException(""));
+
+        mvc.perform(post("/bookings")
+                        .content(mapper.writeValueAsString(bookingDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .header("X-Sharer-User-Id", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        Mockito.verify(bookingService, Mockito.times(1))
+                .createBooking(booker.getId(), bookingDto);
     }
 }

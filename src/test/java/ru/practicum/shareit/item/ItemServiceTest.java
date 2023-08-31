@@ -13,6 +13,7 @@ import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.exception.AccessDeniedException;
+import ru.practicum.shareit.exception.AvailabilityException;
 import ru.practicum.shareit.item.dao.CommentRepository;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.*;
@@ -320,5 +321,46 @@ public class ItemServiceTest {
         assertThat(commentResponseDto.getAuthorName(), is(commentResponseDtoActual.getAuthorName()));
         assertThat(commentResponseDto.getCreated(), is(commentResponseDtoActual.getCreated()));
         assertThat(commentResponseDto.getItemDto(), is(commentResponseDtoActual.getItemDto()));
+    }
+
+    @Test
+    void testPostCommentsWhenUserHaveNotBookedItem() {
+
+        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(booker));
+        Mockito.when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(item));
+        Mockito.when(bookingRepository
+                        .findFirstByItemIdAndBookerIdAndStatusAndEndBefore(any(), any(), any(), any()))
+                .thenReturn(null);
+
+        final AvailabilityException exception = Assertions.assertThrows(
+                AvailabilityException.class,
+                () -> itemService.postComment(commentDto, booker.getId(), item.getId()));
+
+        Assertions.assertEquals("400 BAD_REQUEST \"Пользователь с ID "
+                        + booker.getId() + " не бронировал вещь с ID " + item.getId() + "\"",
+                exception.getMessage());
+    }
+
+    @Test
+    void testFindItems() {
+        Mockito.when(itemRepository.findBySearchKey(any())).thenReturn(List.of(item));
+
+        Collection<ItemDto> itemResponseDtoActual = itemService.findItems("вещь");
+
+        ArrayList<ItemDto> itemResponseDtoArrayList = new ArrayList<>(itemResponseDtoActual);
+
+        assertThat(itemResponseDtoActual.size(), is(List.of(itemDto).size()));
+        assertThat(itemResponseDtoArrayList.get(0).getId(), is(itemDto.getId()));
+        assertThat(itemResponseDtoArrayList.get(0).getDescription(), is(itemDto.getDescription()));
+        assertThat(itemResponseDtoArrayList.get(0).getOwnerId(), is(itemDto.getOwnerId()));
+        assertThat(itemResponseDtoArrayList.get(0).getAvailable(), is(itemDto.getAvailable()));
+        assertThat(itemResponseDtoArrayList.get(0).getName(), is(itemDto.getName()));
+    }
+
+    @Test
+    void testFindItemsWhenSearchKeyIsEmpty() {
+        Collection<ItemDto> itemResponseDtoActual = itemService.findItems("");
+
+        assertThat(itemResponseDtoActual.size(), is(0));
     }
 }

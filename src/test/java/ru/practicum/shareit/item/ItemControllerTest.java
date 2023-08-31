@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import ru.practicum.shareit.exception.AccessDeniedException;
+import ru.practicum.shareit.exception.AvailabilityException;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -128,6 +130,22 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.available", is(itemDto.getAvailable())));
     }
 
+    @Test
+    void testUpdateItemByWrongUser() throws Exception {
+        Mockito.when(itemService.updateItem(any(), any(), any())).thenThrow(new AccessDeniedException(""));
+
+        mvc.perform(patch("/items/{itemId}", 1)
+                        .content(mapper.writeValueAsString(itemDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .header("X-Sharer-User-Id", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+        Mockito.verify(itemService, Mockito.times(1)).updateItem(any(), any(), any());
+
+    }
+
 
     @Test
     void testGetItemById() throws Exception {
@@ -169,5 +187,61 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.itemDto.description", is(commentResponseDto.getItemDto().getDescription())));
 
         Mockito.verify(itemService, Mockito.times(1)).postComment(any(), any(), any());
+    }
+
+    @Test
+    void testPostCommentsByWrongUser() throws Exception {
+        Mockito.when(itemService.postComment(any(), any(), any())).thenThrow(new AvailabilityException(""));
+
+        mvc.perform(post("/items/{itemId}/comment", 1)
+                        .content(mapper.writeValueAsString(commentDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .header("X-Sharer-User-Id", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        Mockito.verify(itemService, Mockito.times(1)).postComment(any(), any(), any());
+    }
+
+    @Test
+    void testGetAllItems() throws Exception {
+        Collection<ItemResponseDto> listOfItems = new ArrayList<>(List.of(itemResponseDto));
+        Mockito.when(itemService.getUserItems(any(), any(), any())).thenReturn(listOfItems);
+
+        mvc.perform(get("/items", 1)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .header("X-Sharer-User-Id", 1)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(itemResponseDto.getId()), Integer.class))
+                .andExpect(jsonPath("$[0].description", is(itemResponseDto.getDescription())))
+                .andExpect(jsonPath("$[0].name", is(itemResponseDto.getName())))
+                .andExpect(jsonPath("$[0].owner.name", is(itemResponseDto.getOwner().getName())))
+                .andExpect(jsonPath("$[0].owner.email", is(itemResponseDto.getOwner().getEmail())))
+                .andExpect(jsonPath("$[0].available", is(itemResponseDto.getAvailable())))
+                .andExpect(jsonPath("$[0].comments", is(itemResponseDto.getComments())));
+
+        Mockito.verify(itemService, Mockito.times(1)).getUserItems(1, 0, 20);
+    }
+
+    @Test
+    void testFindItems() throws Exception {
+        Collection<ItemDto> listOfItems = new ArrayList<>(List.of(itemDto));
+        Mockito.when(itemService.findItems(any())).thenReturn(listOfItems);
+
+        mvc.perform(get("/items/search", 1)
+                        .param("text", "описание")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .header("X-Sharer-User-Id", 1)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(itemDto.getId()), Integer.class))
+                .andExpect(jsonPath("$[0].description", is(itemDto.getDescription())))
+                .andExpect(jsonPath("$[0].name", is(itemDto.getName())))
+                .andExpect(jsonPath("$[0].ownerId", is(itemDto.getOwnerId())))
+                .andExpect(jsonPath("$[0].available", is(itemDto.getAvailable())));
+
+        Mockito.verify(itemService, Mockito.times(1)).findItems("описание");
     }
 }

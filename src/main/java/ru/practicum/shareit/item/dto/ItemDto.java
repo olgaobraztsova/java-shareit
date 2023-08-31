@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class ItemDto {
     private Integer id;
 
