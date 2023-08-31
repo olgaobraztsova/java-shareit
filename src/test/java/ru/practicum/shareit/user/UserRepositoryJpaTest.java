@@ -34,7 +34,7 @@ public class UserRepositoryJpaTest {
     void testDeleteUser() {
         userRepository.delete(user);
         List<User> users = userRepository.findAll();
-
-        assertEquals(0, users.size());
+        Integer size = users.size();
+        assertEquals(0, size);
     }
 }
