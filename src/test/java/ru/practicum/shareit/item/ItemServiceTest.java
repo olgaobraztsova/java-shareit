@@ -37,36 +37,36 @@ import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(MockitoExtension.class)
 public class ItemServiceTest {
     @InjectMocks
-    ItemServiceImpl itemService;
+    private ItemServiceImpl itemService;
     @Mock
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Mock
-    BookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
     @Mock
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
     @Mock
-    ItemRequestRepository itemRequestRepository;
+    private ItemRequestRepository itemRequestRepository;
 
-    User owner;
-    User requester;
-    User booker;
-    UserDto ownerDto;
-    UserDto requesterDto;
-    ItemRequest itemRequest;
-    Item item;
-    Item item2;
-    ItemDto itemDto;
-    Item updatedItem;
-    ItemDto updatedItemDto;
-    ItemResponseDto itemResponseDtoExpected;
-    ItemResponseDto itemResponseDtoExpected2;
-    Booking nextBooking;
-    Booking lastBooking;
-    CommentDto commentDto;
-    CommentResponseDto commentResponseDto;
-    Comment comment;
+    private User owner;
+    private User requester;
+    private User booker;
+    private UserDto ownerDto;
+    private UserDto requesterDto;
+    private ItemRequest itemRequest;
+    private Item item;
+    private Item item2;
+    private ItemDto itemDto;
+    private Item updatedItem;
+    private ItemDto updatedItemDto;
+    private ItemResponseDto itemResponseDtoExpected;
+    private ItemResponseDto itemResponseDtoExpected2;
+    private Booking nextBooking;
+    private Booking lastBooking;
+    private CommentDto commentDto;
+    private CommentResponseDto commentResponseDto;
+    private Comment comment;
 
 
     @BeforeEach

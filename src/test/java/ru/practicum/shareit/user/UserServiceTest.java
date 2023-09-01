@@ -25,15 +25,15 @@ import static org.hamcrest.Matchers.is;
 public class UserServiceTest {
 
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
-    UserServiceImpl userService;
+    private UserServiceImpl userService;
 
-    User user;
-    UserDto userDto;
-    User updatedUser;
-    UserDto updatedUserDto;
+    private User user;
+    private UserDto userDto;
+    private User updatedUser;
+    private UserDto updatedUserDto;
 
     @BeforeEach
     void beforeEach() {

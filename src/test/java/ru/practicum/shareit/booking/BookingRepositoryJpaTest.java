@@ -22,11 +22,11 @@ import java.util.List;
 @DataJpaTest
 public class BookingRepositoryJpaTest {
     @Autowired
-    BookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     private Item itemFromDb;
     private User bookerFromDb;

@@ -33,24 +33,24 @@ import static org.mockito.ArgumentMatchers.*;
 @ExtendWith(MockitoExtension.class)
 public class ItemRequestServiceTest {
     @Mock
-    ItemRequestRepository itemRequestRepository;
+    private ItemRequestRepository itemRequestRepository;
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Mock
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
     @InjectMocks
-    ItemRequestServiceImpl itemRequestService;
+    private ItemRequestServiceImpl itemRequestService;
 
 
-    User owner;
-    User requester;
-    UserDto ownerDto;
-    UserDto requesterDto;
-    ItemRequestShortDto itemRequestShortDto;
-    ItemRequest itemRequest;
-    ItemRequestDto itemRequestDtoExpected;
-    ItemRequestDtoWithResponses itemRequestDtoWithResponsesExpected;
-    Item item;
+    private User owner;
+    private User requester;
+    private UserDto ownerDto;
+    private UserDto requesterDto;
+    private ItemRequestShortDto itemRequestShortDto;
+    private ItemRequest itemRequest;
+    private ItemRequestDto itemRequestDtoExpected;
+    private ItemRequestDtoWithResponses itemRequestDtoWithResponsesExpected;
+    private Item item;
 
     @BeforeEach
     void beforeEach() {

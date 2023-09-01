@@ -17,12 +17,12 @@ import java.util.List;
 public class ItemRepositoryJpaTest {
 
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    Item itemAdded;
+    private Item itemAdded;
 
     @BeforeEach
     void beforeEach() {

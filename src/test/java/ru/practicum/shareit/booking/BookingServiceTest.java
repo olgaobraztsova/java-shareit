@@ -35,23 +35,23 @@ import static org.hamcrest.Matchers.is;
 public class BookingServiceTest {
 
     @InjectMocks
-    BookingServiceImpl bookingService;
+    private BookingServiceImpl bookingService;
 
     @Mock
-    BookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Mock
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
-    UserDto bookerDto;
-    User booker;
-    User owner;
-    Item item;
-    ItemDto itemDto;
-    Booking booking;
-    BookingResponseDto bookingResponseDto;
-    BookingDto bookingDto;
+    private UserDto bookerDto;
+    private User booker;
+    private User owner;
+    private Item item;
+    private ItemDto itemDto;
+    private Booking booking;
+    private BookingResponseDto bookingResponseDto;
+    private BookingDto bookingDto;
 
 
     @BeforeEach

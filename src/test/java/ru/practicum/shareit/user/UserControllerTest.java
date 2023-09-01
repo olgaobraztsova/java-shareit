@@ -38,7 +38,7 @@ public class UserControllerTest {
     private final ObjectMapper mapper = new ObjectMapper();
     private MockMvc mvc;
 
-    UserDto userDto;
+    private UserDto userDto;
 
     @BeforeEach
     void setup() {
