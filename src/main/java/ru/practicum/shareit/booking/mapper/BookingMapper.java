@@ -40,6 +40,7 @@ public class BookingMapper {
                 .start(booking.getStart())
                 .end(booking.getEnd())
                 .bookerId(booking.getBooker().getId())
+                .status(booking.getStatus())
                 .build();
     }
 

@@ -14,7 +14,7 @@ public interface ItemService {
 
     ItemResponseDto getItemById(Integer itemId, Integer userId);
 
-    Collection<ItemResponseDto> getUserItems(Integer userId);
+    Collection<ItemResponseDto> getUserItems(Integer userId, Integer from, Integer size);
 
     Collection<ItemDto> findItems(String searchKey);
 

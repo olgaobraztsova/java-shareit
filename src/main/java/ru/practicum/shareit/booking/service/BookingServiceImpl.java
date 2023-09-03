@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dao.BookingRepository;
@@ -61,7 +63,7 @@ public class BookingServiceImpl implements BookingService {
                 item.getId(), bookingDto.getStart(), bookingDto.getEnd()).size() > 0) {
             throw new AvailabilityException("Вещь с ID " + item.getId() + " уже забронирована на указанные даты");
         }
-        ;
+
 
         Booking booking = BookingMapper.toBooking(bookingDto);
         booking.setBooker(booker);
@@ -118,9 +120,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getAllBookingsByUser(Integer bookerId, String state) {
+    public List<BookingResponseDto> getAllBookingsByUser(Integer bookerId, String state, Integer from, Integer size) {
         User user = userRepository.findById(bookerId)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с ID " + bookerId + " не существует"));
+
+        Pageable page = PageRequest.of((int) from / size, size);
 
         State bookingState = State.getEnumValue(state);
         LocalDateTime now = LocalDateTime.now();
@@ -128,28 +132,30 @@ public class BookingServiceImpl implements BookingService {
 
         switch (bookingState) {
             case ALL:
-                userBookings = bookingRepository.findByBookerIdOrderByStartDesc(bookerId);
+                userBookings = bookingRepository.findByBookerIdOrderByStartDesc(bookerId, page);
                 log.info("Вывод всех бронирований пользователя {}, (ALL)", bookerId);
                 break;
             case CURRENT:
                 userBookings = bookingRepository
-                        .findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(bookerId, now, now);
+                        .findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(bookerId, now, now, page);
                 log.info("Вывод текущих бронирований пользователя {}, (CURRENT)", bookerId);
                 break;
             case PAST:
-                userBookings = bookingRepository.findByBookerIdAndEndBeforeOrderByStartDesc(bookerId, now);
+                userBookings = bookingRepository.findByBookerIdAndEndBeforeOrderByStartDesc(bookerId, now, page);
                 log.info("Вывод прошлых бронирований пользователя {}, (PAST)", bookerId);
                 break;
             case FUTURE:
-                userBookings = bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(bookerId, now);
+                userBookings = bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(bookerId, now, page);
                 log.info("Вывод будущих бронирований пользователя {}, (FUTURE)", bookerId);
                 break;
             case WAITING:
-                userBookings = bookingRepository.findByBookerIdAndStatusEqualsOrderByStartDesc(bookerId, Status.WAITING);
+                userBookings = bookingRepository
+                        .findByBookerIdAndStatusEqualsOrderByStartDesc(bookerId, Status.WAITING, page);
                 log.info("Вывод всех бронирований пользователя {} со статусом WAITING", bookerId);
                 break;
             case REJECTED:
-                userBookings = bookingRepository.findByBookerIdAndStatusEqualsOrderByStartDesc(bookerId, Status.REJECTED);
+                userBookings = bookingRepository
+                        .findByBookerIdAndStatusEqualsOrderByStartDesc(bookerId, Status.REJECTED, page);
                 log.info("Вывод всех бронирований пользователя {} со статусом REJECTED", bookerId);
                 break;
             default:
@@ -159,13 +165,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getAllItemBookingsByOwner(Integer ownerId, String state) {
+    public List<BookingResponseDto> getAllItemBookingsByOwner(Integer ownerId, String state, Integer from, Integer size) {
         User owner = userRepository.findById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с ID " + ownerId + " не существует"));
 
-        if (itemRepository.findAllByOwnerId(ownerId).size() == 0) {
-            throw new EntityNotFoundException("Пользователь c ID " + ownerId + " не является владельцем ни одной вещи");
-        }
+        Pageable page = PageRequest.of((int) from / size, size);
 
         State bookingState = State.getEnumValue(state);
         LocalDateTime now = LocalDateTime.now();
@@ -173,28 +177,35 @@ public class BookingServiceImpl implements BookingService {
 
         switch (bookingState) {
             case ALL:
-                ownerBookings = bookingRepository.findByItemOwnerIdOrderByStartDesc(ownerId);
+                ownerBookings = bookingRepository.findByItemOwnerIdOrderByStartDesc(ownerId, page);
                 log.info("Вывод всех бронирований вещей пользователя {}, (ALL)", ownerId);
                 break;
             case CURRENT:
                 ownerBookings = bookingRepository
-                        .findByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(ownerId, now, now);
+                        .findByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(ownerId, now, now, page);
                 log.info("Вывод текущих бронирований пользователя {}, (CURRENT)", ownerId);
                 break;
             case PAST:
-                ownerBookings = bookingRepository.findByItemOwnerIdAndEndBeforeOrderByStartDesc(ownerId, now);
+                ownerBookings = bookingRepository.findByItemOwnerIdAndEndBeforeOrderByStartDesc(ownerId, now, page);
                 log.info("Вывод прошлых бронирований пользователя {}, (PAST)", ownerId);
                 break;
             case FUTURE:
-                ownerBookings = bookingRepository.findByItemOwnerIdAndStartAfterOrderByStartDesc(ownerId, now);
+                ownerBookings = bookingRepository.findByItemOwnerIdAndStartAfterOrderByStartDesc(ownerId, now, page);
                 log.info("Вывод будущих бронирований пользователя {}, (FUTURE)", ownerId);
                 break;
             case WAITING:
-                ownerBookings = bookingRepository.findByItemOwnerIdAndStatusEqualsOrderByStartDesc(ownerId, Status.WAITING);
+                ownerBookings = bookingRepository
+                        .findByItemOwnerIdAndStatusEqualsOrderByStartDesc(
+                                ownerId,
+                                Status.WAITING,
+                                page);
                 log.info("Вывод всех бронирований пользователя {} со статусом WAITING", ownerId);
                 break;
             case REJECTED:
-                ownerBookings = bookingRepository.findByItemOwnerIdAndStatusEqualsOrderByStartDesc(ownerId, Status.REJECTED);
+                ownerBookings = bookingRepository
+                        .findByItemOwnerIdAndStatusEqualsOrderByStartDesc(ownerId,
+                                Status.REJECTED,
+                                page);
                 log.info("Вывод всех бронирований пользователя {} со статусом REJECTED", ownerId);
                 break;
             default:

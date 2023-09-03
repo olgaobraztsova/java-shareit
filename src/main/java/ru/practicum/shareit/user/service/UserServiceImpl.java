@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto createUser(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
-        //checkIfEmailAlreadyRegistered(user.getId(), user.getEmail());
         log.info("Создание пользователя с email: {}", user.getEmail());
         return UserMapper.userToDto(userRepository.save(user));
     }

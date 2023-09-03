@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemWithBookingsAndComments;
+import ru.practicum.shareit.request.dao.ItemRequestRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -38,6 +42,7 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
     @Transactional
     @Override
@@ -45,6 +50,13 @@ public class ItemServiceImpl implements ItemService {
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь с ID " + userId + " не найден")));
+        if (itemDto.getRequestId() != null) {
+            Integer requestId = itemDto.getRequestId();
+            ItemRequest itemRequest = itemRequestRepository.findById(requestId)
+                    .orElseThrow(() -> new EntityNotFoundException("Запрос с ID " + requestId + " не найден"));
+            item.setRequest(itemRequest);
+        }
+
         log.info("Добавлена вещь {} пользователем с ID {}", item.getName(), userId);
         return ItemMapper.itemToDto(itemRepository.save(item));
     }
@@ -113,13 +125,15 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public Collection<ItemResponseDto> getUserItems(Integer ownerId) {
+    public Collection<ItemResponseDto> getUserItems(Integer ownerId, Integer from, Integer size) {
         User user = userRepository.findById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь с ID " + ownerId + " не найден"));
 
+        Pageable page = PageRequest.of((int) from / size, size);
+
         LocalDateTime now = LocalDateTime.now();
 
-        List<Item> userItems = itemRepository.findAllByOwnerId(ownerId);
+        List<Item> userItems = itemRepository.findAllByOwnerIdOrderById(ownerId, page);
 
         List<Booking> approvedBookings = bookingRepository
                 .findApprovedBookingsFor(userItems, Sort.by(Sort.Direction.DESC, "start"));

@@ -8,6 +8,7 @@ import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 
@@ -41,14 +42,21 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingResponseDto> getAllBookingsByUser(@RequestHeader("X-Sharer-User-Id") Integer userId,
-                                                 @RequestParam(defaultValue = "ALL") String state) {
-        return bookingService.getAllBookingsByUser(userId, state);
+    public List<BookingResponseDto> getAllBookingsByUser(
+            @RequestHeader("X-Sharer-User-Id") Integer userId,
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(defaultValue = "0") @Min(0) Integer from,
+            @RequestParam(defaultValue = "20") @Min(1) Integer size
+    ) {
+        return bookingService.getAllBookingsByUser(userId, state, from, size);
     }
 
     @GetMapping("/owner")
-    public List<BookingResponseDto> getAllItemBookingsByOwner(@RequestHeader("X-Sharer-User-Id") Integer ownerId,
-                                                      @RequestParam(defaultValue = "ALL") String state) {
-        return bookingService.getAllItemBookingsByOwner(ownerId, state);
+    public List<BookingResponseDto> getAllItemBookingsByOwner(
+            @RequestHeader("X-Sharer-User-Id") Integer ownerId,
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(defaultValue = "0") @Min(0) Integer from,
+            @RequestParam(defaultValue = "20") @Min(1) Integer size) {
+        return bookingService.getAllItemBookingsByOwner(ownerId, state, from, size);
     }
 }

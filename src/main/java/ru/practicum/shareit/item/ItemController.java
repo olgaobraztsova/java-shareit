@@ -11,6 +11,7 @@ import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.booking.service.validation.Create;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.Collection;
 
 @RestController
@@ -41,8 +42,12 @@ public class ItemController {
     }
 
     @GetMapping
-    public Collection<ItemResponseDto> getUserItems(@RequestHeader("X-Sharer-User-Id") Integer userId) {
-        return itemService.getUserItems(userId);
+    public Collection<ItemResponseDto> getUserItems(
+            @RequestHeader("X-Sharer-User-Id") Integer userId,
+            @RequestParam(name = "from", defaultValue = "0") @Min(0) Integer from,
+            @RequestParam(name = "size", defaultValue = "20") @Min(1) Integer size
+    ) {
+        return itemService.getUserItems(userId, from, size);
     }
 
     @GetMapping("/search")
