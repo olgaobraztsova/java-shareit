@@ -16,11 +16,8 @@ import java.util.Collection;
 @Builder
 public class ItemResponseDto implements Comparable<ItemResponseDto> {
     private Integer id;
-   // @NotBlank
     private String name;
-   // @NotBlank
     private String description;
-  //  @NotNull
     private Boolean available;
     private UserDto owner;
     private BookingShortDto lastBooking;

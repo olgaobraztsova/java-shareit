@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.booking.service.validation.Create;
-import ru.practicum.shareit.booking.service.validation.Update;
+import ru.practicum.shareit.validation.Create;
+import ru.practicum.shareit.validation.Update;
 
 
 @RestController

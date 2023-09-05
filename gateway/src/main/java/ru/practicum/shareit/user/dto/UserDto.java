@@ -1,8 +1,8 @@
 package ru.practicum.shareit.user.dto;
 
 import lombok.*;
-import ru.practicum.shareit.booking.service.validation.Create;
-import ru.practicum.shareit.booking.service.validation.Update;
+import ru.practicum.shareit.validation.Create;
+import ru.practicum.shareit.validation.Update;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

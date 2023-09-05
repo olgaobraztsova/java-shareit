@@ -66,5 +66,4 @@ public class BookingController {
 		log.info("Get booking with state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
 		return bookingClient.getAllItemBookingsByOwner(userId, state, from, size);
 	}
-
 }

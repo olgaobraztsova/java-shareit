@@ -15,6 +15,5 @@ public enum State {
         } catch (Exception e) {
             throw new IllegalArgumentException("Unknown state: " + state);
         }
-
     }
 }

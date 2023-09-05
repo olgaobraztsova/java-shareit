@@ -120,13 +120,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getAllBookingsByUser(Integer bookerId, String state, Integer from, Integer size) {
+    public List<BookingResponseDto> getAllBookingsByUser(Integer bookerId, State bookingState, Integer from, Integer size) {
         User user = userRepository.findById(bookerId)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с ID " + bookerId + " не существует"));
 
         Pageable page = PageRequest.of((int) from / size, size);
 
-        State bookingState = State.getEnumValue(state);
         LocalDateTime now = LocalDateTime.now();
         List<Booking> userBookings = Collections.emptyList();
 
@@ -165,13 +164,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getAllItemBookingsByOwner(Integer ownerId, String state, Integer from, Integer size) {
+    public List<BookingResponseDto> getAllItemBookingsByOwner(Integer ownerId, State bookingState, Integer from, Integer size) {
         User owner = userRepository.findById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с ID " + ownerId + " не существует"));
 
         Pageable page = PageRequest.of((int) from / size, size);
 
-        State bookingState = State.getEnumValue(state);
         LocalDateTime now = LocalDateTime.now();
         List<Booking> ownerBookings;
 

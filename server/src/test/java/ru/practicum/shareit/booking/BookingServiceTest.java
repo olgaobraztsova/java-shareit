@@ -12,6 +12,7 @@ import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.service.BookingServiceImpl;
 import ru.practicum.shareit.exception.AvailabilityException;
@@ -177,7 +178,7 @@ public class BookingServiceTest {
         Mockito.when(bookingRepository.findByBookerIdOrderByStartDesc(any(), any())).thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllBookingsByUser(booker.getId(), "ALL", 0, 10);
+                bookingService.getAllBookingsByUser(booker.getId(), State.valueOf("ALL"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -195,7 +196,7 @@ public class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllBookingsByUser(booker.getId(), "WAITING", 0, 10);
+                bookingService.getAllBookingsByUser(booker.getId(), State.valueOf("WAITING"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -213,7 +214,7 @@ public class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllBookingsByUser(booker.getId(), "CURRENT", 0, 10);
+                bookingService.getAllBookingsByUser(booker.getId(), State.valueOf("CURRENT"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -231,7 +232,7 @@ public class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllBookingsByUser(booker.getId(), "PAST", 0, 10);
+                bookingService.getAllBookingsByUser(booker.getId(), State.valueOf("PAST"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -249,7 +250,7 @@ public class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllBookingsByUser(booker.getId(), "FUTURE", 0, 10);
+                bookingService.getAllBookingsByUser(booker.getId(), State.valueOf("FUTURE"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -267,7 +268,7 @@ public class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllBookingsByUser(booker.getId(), "REJECTED", 0, 10);
+                bookingService.getAllBookingsByUser(booker.getId(), State.valueOf("REJECTED"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -298,7 +299,7 @@ public class BookingServiceTest {
         Mockito.when(bookingRepository.findByItemOwnerIdOrderByStartDesc(any(), any())).thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllItemBookingsByOwner(owner.getId(), "ALL", 0, 10);
+                bookingService.getAllItemBookingsByOwner(owner.getId(), State.valueOf("ALL"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -317,7 +318,7 @@ public class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllItemBookingsByOwner(owner.getId(), "CURRENT", 0, 10);
+                bookingService.getAllItemBookingsByOwner(owner.getId(), State.valueOf("CURRENT"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -336,7 +337,7 @@ public class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllItemBookingsByOwner(owner.getId(), "PAST", 0, 10);
+                bookingService.getAllItemBookingsByOwner(owner.getId(), State.valueOf("PAST"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -355,7 +356,7 @@ public class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllItemBookingsByOwner(owner.getId(), "FUTURE", 0, 10);
+                bookingService.getAllItemBookingsByOwner(owner.getId(), State.valueOf("FUTURE"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -374,7 +375,7 @@ public class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllItemBookingsByOwner(owner.getId(), "WAITING", 0, 10);
+                bookingService.getAllItemBookingsByOwner(owner.getId(), State.valueOf("WAITING"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));
@@ -393,7 +394,7 @@ public class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         List<BookingResponseDto> listOfBookingsActual =
-                bookingService.getAllItemBookingsByOwner(owner.getId(), "REJECTED", 0, 10);
+                bookingService.getAllItemBookingsByOwner(owner.getId(), State.valueOf("REJECTED"), 0, 10);
 
         assertThat(listOfBookingsActual.size(), is(1));
         assertThat(listOfBookingsActual.get(0).getId(), is(bookingResponseDto.getId()));

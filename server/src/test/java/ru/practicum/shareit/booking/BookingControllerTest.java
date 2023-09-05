@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.AvailabilityException;
@@ -215,7 +216,7 @@ public class BookingControllerTest {
                 .andExpect(jsonPath("$[0].status", is(approvedBookingResponseDto.getStatus().name())));
 
         Mockito.verify(bookingService, Mockito.times(1))
-                .getAllBookingsByUser(1, "ALL", 0, 10);
+                .getAllBookingsByUser(1, State.valueOf("ALL"), 0, 10);
     }
 
     @Test
@@ -234,7 +235,7 @@ public class BookingControllerTest {
                 .andExpect(content().json(mapper.writeValueAsString(List.of(approvedBookingResponseDto))));
 
         Mockito.verify(bookingService, Mockito.times(1))
-                .getAllItemBookingsByOwner(1, "ALL", 0, 10);
+                .getAllItemBookingsByOwner(1, State.valueOf("ALL"), 0, 10);
     }
 
     @Test

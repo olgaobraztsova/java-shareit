@@ -24,14 +24,4 @@ public enum BookingState {
 		}
 		return Optional.empty();
 	}
-//
-//	public static BookingState getEnumValue(String state) {
-//
-//		try {
-//			return BookingState.valueOf(state);
-//		} catch (Exception e) {
-//			throw new IllegalArgumentException("Unknown state: " + state);
-//		}
-//
-//	}
 }
