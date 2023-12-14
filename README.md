@@ -27,6 +27,12 @@ Shareit lets users share items.
 # ER Diagram
 ![img.png](img.png)
 
+# Requirements
+
+- Java 11
+- Docker
+- PostgreSQL / H2
+
 # Developer
 [Olga Obraztsova](https://github.com/olgaobraztsova)
 
